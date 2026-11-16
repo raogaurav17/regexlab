@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "regexlab"
+version = "1.0.0"
+description = "Regex -> NFA -> DFA -> minimal DFA visualizer (compiler design mini project)"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = []          # standard library only
+
+[project.scripts]
+regexlab = "regexlab.cli:main"
+
+[tool.setuptools]
+packages = ["regexlab"]
+
+[tool.setuptools.package-data]
+regexlab = ["web/*"]

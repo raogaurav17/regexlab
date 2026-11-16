@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>regexlab · Regex Automata Visualizer</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main>
+  <header class="app-header">
+    <div>
+      <p class="eyebrow"><span class="pulse"></span> Interactive compiler lab</p>
+      <h1>Regex Automata <span>Visualizer</span></h1>
+      <p class="sub">Trace a regular expression through every stage of compilation, then step through the resulting machines.</p>
+    </div>
+    <div class="header-meta">
+      <span class="badge">No dependencies</span>
+      <span class="badge">Runs locally</span>
+    </div>
+  </header>
+
+  <section class="card">
+    <div class="card-heading">
+      <div>
+        <label class="t" for="re">Regular expression</label>
+        <p class="hint">Start with an example or write your own pattern.</p>
+      </div>
+      <span class="shortcut">Updates live</span>
+    </div>
+    <div class="input-shell"><span class="input-prefix">/</span><input id="re" type="text" value="(a|b)*abb" spellcheck="false" autocomplete="off" autocapitalize="off"><span class="input-suffix">/</span></div>
+    <div id="err" class="err" role="alert"></div>
+    <div class="chips" id="examples"><span class="k">Try:</span></div>
+    <div class="ops">Supported: literals · <code>|</code> union · <code>*</code> <code>+</code> <code>?</code> · <code>( )</code> grouping · <code>\</code> escape</div>
+  </section>
+
+  <section class="card" aria-label="Test a string">
+    <div class="card-heading">
+      <div>
+        <label class="t" for="str">Test string</label>
+        <p class="hint">Step through all three automata in sync.</p>
+      </div>
+      <span class="step-count">01 <span>/</span> 04</span>
+    </div>
+    <div class="row">
+      <input id="str" type="text" value="babb" spellcheck="false" autocomplete="off" autocapitalize="off">
+      <div class="transport">
+      <button id="bReset" title="Reset" aria-label="Reset">⏮</button>
+      <button id="bBack" title="Step back" aria-label="Step back">◀</button>
+      <button id="bNext" class="primary" title="Step forward" aria-label="Step forward">▶ Step</button>
+      <button id="bEnd" title="Jump to end" aria-label="Jump to end">⏭</button>
+      <button id="bPlay" title="Auto-play">Play</button>
+      </div>
+    </div>
+    <div class="tape" id="tape"></div>
+    <div class="status" id="status"></div>
+    <div class="verdict" id="verdict"></div>
+  </section>
+
+  <section class="card">
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div id="panels"></div>
+  </section>
+
+  <details class="card">
+    <summary>How it works</summary>
+    <p><b>Grammar</b> (recursive descent; precedence: repetition &gt; concatenation &gt; union):</p>
+<pre>regex  → term ( '|' term )*
+term   → factor*                (empty term = ε)
+factor → atom ( '*' | '+' | '?' )*
+atom   → CHAR | '(' regex ')'</pre>
+    <ul>
+      <li><b>Thompson's construction</b> builds an ε-NFA with one start and one accept state; |NFA| = O(m) for a regex of length m.</li>
+      <li><b>Subset construction</b> turns each reachable set of NFA states (closed under ε) into one DFA state. Worst case 2<sup>n</sup> states.</li>
+      <li><b>Hopcroft's algorithm</b> refines {accepting, non-accepting} until no block splits, always re-queuing the smaller half. With inverse-transition lists it runs in O(|Σ| · n log n); this implementation scans for pre-images for clarity (O(|Σ| · n²) worst case). A hidden dead state keeps the DFA total and is omitted from the drawing.</li>
+      <li>Every run is cross-checked against Python's own <code>re</code> engine.</li>
+    </ul>
+  </details>
+</main>
+<script src="/app.js"></script>
+</body>
+</html>
