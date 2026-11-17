@@ -4,13 +4,6 @@
   const $ = (s) => document.querySelector(s);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const PREFIX = { nfa: "q", dfa: "D", min: "M" };
-  const TABS = [
-    { id: "ast", label: (c) => `1 · Tokens &amp; tree <small>${c.ast} nodes</small>` },
-    { id: "nfa", label: (c) => `2 · NFA <small>${c.nfa} states</small>` },
-    { id: "dfa", label: (c) => `3 · DFA <small>${c.dfa} states</small>` },
-    { id: "min", label: (c) => `4 · Minimal DFA <small>${c.min} states</small>` },
-    { id: "tables", label: () => "Tables" },
-  ];
   const CAPS = {
     nfa: "Thompson's construction — ε-edges glue the fragments for each operator.",
     dfa: "Subset construction — every DFA state is the ε-closure of a set of NFA states (see Tables).",
@@ -19,7 +12,7 @@
   const EXAMPLES = [["(a|b)*abb", "babb"], ["a(b|c)*d", "abcbd"], ["(0|1)*01", "1101"],
                     ["a+b?c*", "aabcc"], ["(ab|a)(c|bc)", "abc"], ["(a*b*)*", "abba"]];
 
-  let info = null, run = null, tab = "nfa", pos = 0, timer = null, buildSeq = 0, runSeq = 0, debounce = null;
+  let info = null, run = null, pos = 0, timer = null, buildSeq = 0, runSeq = 0, debounce = null;
 
   const api = async (path, params) => (await fetch(path + "?" + new URLSearchParams(params))).json();
 
@@ -43,16 +36,7 @@
     renderRun();
   }
 
-  function setTab(id) {
-    tab = id;
-    document.querySelectorAll(".tab").forEach((b) => b.setAttribute("aria-selected", b.dataset.id === id));
-    document.querySelectorAll(".panel").forEach((p) => (p.hidden = p.dataset.id !== id));
-  }
-
   function renderPanels() {
-    $("#tabs").innerHTML = TABS.map((t) =>
-      `<button class="tab" role="tab" data-id="${t.id}" aria-selected="${t.id === tab}">${t.label(info.counts)}</button>`).join("");
-    $("#tabs").querySelectorAll(".tab").forEach((b) => (b.onclick = () => setTab(b.dataset.id)));
     const toks = info.tokens.map((t) => `<span class="tok"><b>${t.type}</b>${esc(t.value)}</span>`).join("");
     let html = `<div class="panel" data-id="ast"><p class="cap">Lexer output, then the parse tree (recursive descent).</p>
       <div class="toks">${toks}</div><pre class="tree">${esc(info.tree)}</pre></div>`;
@@ -64,7 +48,6 @@
     html += `<div class="panel" data-id="tables">${info.tables}</div>`;
     $("#panels").innerHTML = html;
     $("#panels").querySelectorAll("[data-exp]").forEach((b) => (b.onclick = () => exportSvg(b.dataset.exp)));
-    setTab(tab);
   }
 
   function exportSvg(id) {
