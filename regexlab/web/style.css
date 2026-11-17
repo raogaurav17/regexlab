@@ -15,7 +15,6 @@ main{max-width:1100px;margin:0 auto;padding:48px 20px 80px}
 h1{font-size:clamp(30px,4vw,44px);line-height:1.08;margin:0 0 10px;letter-spacing:-.045em}
 h1 span{color:var(--accent)}
 .sub{max-width:650px;margin:0;color:var(--muted);font-size:16px}
-.shortcut,.step-count{border:1px solid var(--line);border-radius:999px;padding:5px 10px;color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;background:color-mix(in srgb,var(--panel) 80%,transparent)}
 .card{background:color-mix(in srgb,var(--panel) 96%,transparent);border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 12px 30px rgba(34,54,94,.08)}
 .card-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:10px}
 .hint{margin:2px 0 0;color:var(--muted);font-size:13px}
@@ -53,6 +52,11 @@ button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
 .verdict{margin-top:10px;font-weight:700}
 .verdict.ok{color:var(--ok)} .verdict.bad{color:var(--bad)}
 .verdict small{font-weight:400;color:var(--muted);margin-left:6px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.tab{font:600 13px system-ui,sans-serif;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);cursor:pointer}
+.tab:hover{border-color:var(--accent);background:var(--accent-soft)}
+.tab[aria-selected=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+.tab small{font-weight:500;opacity:.85}
 .panel[hidden]{display:none}
 .cap{margin:0 0 10px;color:var(--muted);font-size:13px}
 .graph{overflow:auto;border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:8px;text-align:center}
@@ -75,7 +79,6 @@ details p,details li{color:var(--muted);font-size:14px}
   .app-header{display:block}
   .card{padding:16px}
   .card-heading{display:block}
-  .shortcut,.step-count{display:inline-block;margin-top:10px}
   .row input[type=text]{flex-basis:100%}
   .transport{width:100%}
   .transport button{flex:1}

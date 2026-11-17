@@ -22,7 +22,6 @@
         <label class="t" for="re">Regular expression</label>
         <p class="hint">Start with an example or write your own pattern.</p>
       </div>
-      <span class="shortcut">Updates live</span>
     </div>
     <div class="input-shell"><span class="input-prefix">/</span><input id="re" type="text" value="(a|b)*abb" spellcheck="false" autocomplete="off" autocapitalize="off"><span class="input-suffix">/</span></div>
     <div id="err" class="err" role="alert"></div>
@@ -36,7 +35,6 @@
         <label class="t" for="str">Test string</label>
         <p class="hint">Step through all three automata in sync.</p>
       </div>
-      <span class="step-count">01 <span>/</span> 04</span>
     </div>
     <div class="row">
       <input id="str" type="text" value="babb" spellcheck="false" autocomplete="off" autocapitalize="off">
@@ -54,23 +52,10 @@
   </section>
 
   <section class="card">
+    <div class="tabs" role="tablist" aria-label="Automata views" id="tabs"></div>
     <div id="panels"></div>
   </section>
 
-  <details class="card">
-    <summary>How it works</summary>
-    <p><b>Grammar</b> (recursive descent; precedence: repetition &gt; concatenation &gt; union):</p>
-<pre>regex  → term ( '|' term )*
-term   → factor*                (empty term = ε)
-factor → atom ( '*' | '+' | '?' )*
-atom   → CHAR | '(' regex ')'</pre>
-    <ul>
-      <li><b>Thompson's construction</b> builds an ε-NFA with one start and one accept state; |NFA| = O(m) for a regex of length m.</li>
-      <li><b>Subset construction</b> turns each reachable set of NFA states (closed under ε) into one DFA state. Worst case 2<sup>n</sup> states.</li>
-      <li><b>Hopcroft's algorithm</b> refines {accepting, non-accepting} until no block splits, always re-queuing the smaller half. With inverse-transition lists it runs in O(|Σ| · n log n); this implementation scans for pre-images for clarity (O(|Σ| · n²) worst case). A hidden dead state keeps the DFA total and is omitted from the drawing.</li>
-      <li>Every run is cross-checked against Python's own <code>re</code> engine.</li>
-    </ul>
-  </details>
 </main>
 <script src="/app.js"></script>
 </body>
