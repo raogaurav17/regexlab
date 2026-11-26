@@ -6,6 +6,7 @@ Grammar (precedence: repetition > concatenation > union):
     term   -> factor*                 (empty term = epsilon)
     factor -> atom ( '*' | '+' | '?' )*
     atom   -> CHAR | '(' regex ')'
+    CHAR ::= any character except | * + ? ( )
 """
 from dataclasses import dataclass
 
